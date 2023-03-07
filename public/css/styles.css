@@ -20,6 +20,10 @@ html {
     color: #1abc9c !important;
 }
 
+.create-post {
+  color: rgb(170, 207, 255) !important;
+}
+
 .footer-padding {
 	padding-bottom: 60px;
 }
