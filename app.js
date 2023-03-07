@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
-require("dotenv").config();
+const _ = require("lodash");
 
 const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
 const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
@@ -36,6 +36,14 @@ app.get("/", function(req, res){
   });
 });
 
+app.get("/about", function(req, res){
+  res.render("about", {aboutContent: aboutContent});
+});
+
+app.get("/contact", function(req, res){
+  res.render("contact", {contactContent: contactContent});
+});
+
 
 app.get("/compose", function(req, res){
   res.render("compose");
@@ -66,15 +74,19 @@ const requestedPostId = req.params.postId;
   });
 });
 
-
-app.get("/about", function(req, res){
-  res.render("about", {aboutContent: aboutContent});
+app.post("/delete", (req, res) => {
+  // Get id of post to be deleted from request body (passed from post.ejs btn)
+  const requestedId = req.body.deleteButton;
+  // Search database for post and delete; redirect to home route
+  Post.findByIdAndDelete({_id: requestedId}).then((err) => {
+      if (!err) {
+          // console.log("Blog post successfully deleted!");
+          res.redirect("/");
+      } else {
+          console.log(err);
+      }
+  });
 });
-
-app.get("/contact", function(req, res){
-  res.render("contact", {contactContent: contactContent});
-});
-
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");
