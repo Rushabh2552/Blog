@@ -18,6 +18,7 @@ html {
 }
 .navbar-nav  li a:hover {
     color: #1abc9c !important;
+    font-family: 'Prata', serif;
 }
 
 .create-post {
